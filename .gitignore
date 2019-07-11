@@ -1,2 +1,3 @@
-node_modules
 .vscode
+db
+node_modules
