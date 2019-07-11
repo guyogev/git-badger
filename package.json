@@ -1,0 +1,16 @@
+{
+  "name": "git-badgeer",
+  "version": "0.1.0",
+  "description": "",
+  "main": "bitbucketRepoReader.js",
+  "scripts": {
+    "setup": "node ./setup.js",
+    "bitbucketRepoReader": "node ./bitbucketRepoReader.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "sqlite3": "^4.0.9"
+  }
+}
