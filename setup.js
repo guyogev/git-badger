@@ -11,8 +11,20 @@ const db = new sqlite3.Database(
     }
   });
 
-console.log('Dropping repositories table');
-db.run('DROP TABLE IF EXISTS repositories;');
-console.log('Creating repositories table');
-db.run('CREATE TABLE IF NOT EXISTS repositories (name TEXT, href TEXT, UNIQUE(href));');
+console.log('Dropping tables');
+db.run('DROP TABLE IF EXISTS commits;');
+
+console.log('Creating tables');
+
+console.log('Creating commits table');
+db.serialize(function () {
+  db.run(`
+    CREATE TABLE IF NOT EXISTS commits (
+      ID            INTEGER PRIMARY KEY AUTOINCREMENT,
+      commit_hash   TEXT,
+      repo_href     TEXT,
+      author_email  TEXT,
+      datetime DATETIME);
+`);
+});
 db.close();

@@ -1,25 +1,19 @@
 /**
- * @fileoverview Script that scans a user Bitbucket account, and writes data to
- * DB.
+ * @fileoverview Scans a user Bitbucket account, and writes data to
+ * OUTPUT_FILE.
  *
  * Expects BITBUCKET_PW & BITBUCKET_USER ENV vars to be set.
  */
 
 const axios = require('axios');
-const sqlite3 = require('sqlite3').verbose();
+const fs = require('fs');
 
-
+// Bitbucket credentials
 const PW = process.env.BITBUCKET_PW;
-const REPO_API = 'https://api.bitbucket.org/2.0/repositories/spectory';
 const USERNAME = process.env.BITBUCKET_USER;
-const DB_PATH = './db/git_badger.sqlite';
 
-const DB = new sqlite3.Database(DB_PATH, sqlite3.OPEN_READWRITE, (err) => {
-  if (err) {
-    console.error(err.message);
-  }
-  console.log(`Connected to the ${DB_PATH} database.`);
-});
+const OUTPUT_FILE = '/tmp/git_badger/bitbucket_repositories.txt';
+const REPO_API = 'https://api.bitbucket.org/2.0/repositories/spectory';
 
 /**
  * Scans repositories from bitbucket page by page, extracting the each
@@ -30,7 +24,6 @@ const DB = new sqlite3.Database(DB_PATH, sqlite3.OPEN_READWRITE, (err) => {
  */
 async function fetchFrom(pageUrl, acc = []) {
   if (!pageUrl) {
-    console.log(`fetchFrom: ${acc.length} repositories found`);
     return acc;
   }
   console.log(`fetchFrom: querying ${pageUrl}`);
@@ -43,10 +36,7 @@ async function fetchFrom(pageUrl, acc = []) {
       }
     });
     const reposFromPage =
-      res.data.values.map(repo => ({
-        href: repo.links.clone[1].href,
-        name: repo.name
-      }));
+      res.data.values.map(repo => repo.links.clone[1].href);
     acc = [...acc, ...reposFromPage];
     return await fetchFrom(res.data.next, acc)
   } catch (err) {
@@ -58,13 +48,9 @@ async function fetchFrom(pageUrl, acc = []) {
 
 /** Writes repositories SSH href to OUTPUT_FILE, adds newline at EOF. */
 fetchFrom(REPO_API).then(repos => {
-  DB.serialize(() => {
-    console.log(`Writing to ${DB_PATH}`)
-    DB.run("begin transaction");
-    DB.prepare("INSERT OR IGNORE INTO repositories(name,href) VALUES (?,?)");
-    repos.forEach((r) => DB.run(
-      "INSERT OR IGNORE INTO repositories(name,href) VALUES (?,?)",
-      r.name, r.href));
-    DB.run("commit");
-  });
+  console.log(`fetchFrom: ${repos.length} repositories found. Writing to ${OUTPUT_FILE}`);
+  const file = fs.createWriteStream(OUTPUT_FILE);
+  file.on('error', (err) => console.error(err));
+  repos.sort().forEach((r) => file.write(r + '\n'));
+  file.end();
 });
