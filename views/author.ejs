@@ -8,12 +8,8 @@
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
     <ul>
-      <% authors.forEach(function(author){ %>
-        <li>
-          <a href=<%= `/authors/${author.author_email}` %>>
-            <%= author.author_email %>>
-          </a>
-        </li>
+      <% counters.forEach(function(counter){ %>
+        <li><%= JSON.stringify(counters) %></li>
       <% }); %>
     </ul>
   </body>
