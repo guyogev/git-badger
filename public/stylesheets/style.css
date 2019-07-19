@@ -1,8 +1,65 @@
+html,
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  height: 100%;
+  margin: 0;
+  width: 100%;
 }
 
-a {
-  color: #00B7FF;
+img {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+.subtitle {
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  font-weight: bold;
+  font-style: oblique;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+header {
+  background: #f5faff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-sizing: border-box;
+  display: flex;
+  height: 64px;
+  justify-content: space-between;
+  margin: auto;
+  padding: 8px;
+}
+
+header .logo-name {
+  display: flex;
+}
+
+main {
+  height: calc(100% - 64px);
+  max-width: 1024px;
+  margin: auto;
+}
+
+aside {
+  height: 100%;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 1px 0px 3px rgba(0, 0, 0, 0.12);
+}
+
+aside .avatar {
+  width: 128px;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+aside .name {
+  margin-top: 16px;
 }

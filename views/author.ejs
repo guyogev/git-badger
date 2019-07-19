@@ -1,16 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <%- include('./partials/header') %>
+
+  <main>
+    <%- include('./partials/aside', {author: counters[0].author_email}) %>
+  </main>
+
+
+
+    <!-- <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
     <ul>
       <% counters.forEach(function(counter){ %>
         <li><%= JSON.stringify(counters) %></li>
       <% }); %>
-    </ul>
-  </body>
+    </ul> -->
+</body>
+
 </html>
