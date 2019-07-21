@@ -41,13 +41,12 @@ header .logo-name {
 
 main {
   height: calc(100% - 64px);
-  max-width: 1024px;
-  margin: auto;
+  display: flex;
 }
 
 aside {
   height: 100%;
-  width: 200px;
+  min-width: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -55,11 +54,37 @@ aside {
 }
 
 aside .avatar {
-  width: 128px;
-  padding: 8px;
+  width: 96px;
+  padding: 16px;
   box-sizing: border-box;
+  border: 1px solid;
+  border-radius: 50px;
 }
 
 aside .name {
   margin-top: 16px;
+}
+
+.badges {
+  flex: 1;
+  display: flex;
+}
+
+.badge {
+  width: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  padding: 18px;
+  position: relative;
+}
+
+.badge img {
+  width: 64px;
+  height: 64px;
+}
+
+.badge .title {
+  padding-top: 4px;
 }

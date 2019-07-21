@@ -7,20 +7,19 @@
 
 source ./scripts/constants.sh
 
-readonly PREFIX="INSERT OR IGNORE INTO commits(repo_href,commit_hash,author_email,datetime) VALUES("
+readonly PREFIX="INSERT OR IGNORE INTO commits(repo_href,commit_hash,author_email,datetime,css_loc_added,css_loc_removed,elixir_loc_added,elixir_loc_removed,java_loc_added,java_loc_removed,js_loc_added,js_loc_removed,less_loc_added,less_loc_removed,package_json_loc_added,package_json_loc_removed,rake_loc_added,rake_loc_removed,ruby_loc_added,ruby_loc_removed,sass_loc_added,sass_loc_removed,scss_loc_added,scss_loc_removed,ts_loc_added,ts_loc_removed) VALUES("
 readonly SUFFIX=");"
 readonly BULK_SIZE=1000;
 
-# TODO: Remove head limit.
-for repo in $(cat "$REPOSITORIES_FILE" | head -n3);
+for repo in $(cat "$REPOSITORIES_FILE");
 do
   printf "%s\n" "${grn}Start processing ${repo}.${end}"
   commitStatsFolder=$(git_stats_path $repo);
   commitStatsFile=$(git_stats_commits_csv_path $repo)
+  echo $commitStatsFolder
   cd $commitStatsFolder
   printf "%s\n" "${yel}Cleaning up old files...${end}"
-  rm $file_splits
-  split -d -l $BULK_SIZE commits.txt commits_part
+  split -d -l $BULK_SIZE commits.csv commits_part
   file_splits=$(ls | grep commits_part)
   cd -
   for f in $file_splits
@@ -32,5 +31,6 @@ do
     echo "COMMIT;" >> /tmp/sql
     sqlite3 ./db/git_badger.sqlite ".read /tmp/sql"
   done
+  rm $file_splits
   printf "%s\n" "${grn}Done processing ${repo}.${end}"
 done

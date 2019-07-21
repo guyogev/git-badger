@@ -1,0 +1,5 @@
+<div class="badges">
+   <% badges.forEach(badge => { %>
+      <%- include(`./badges/${badge.name}`, {badge}) %>
+   <% }); %>
+</div>

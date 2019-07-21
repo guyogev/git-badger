@@ -12,18 +12,11 @@
   <%- include('./partials/header') %>
 
   <main>
-    <%- include('./partials/aside', {author: counters[0].author_email}) %>
+    <%- include('./partials/aside', {
+      author: counters.author_email,
+    }) %>
+    <%- include('./partials/badges', {badges}) %>
   </main>
-
-
-
-    <!-- <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-    <ul>
-      <% counters.forEach(function(counter){ %>
-        <li><%= JSON.stringify(counters) %></li>
-      <% }); %>
-    </ul> -->
 </body>
 
 </html>
