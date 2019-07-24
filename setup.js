@@ -12,7 +12,7 @@ const db = new sqlite3.Database(
   });
 
 console.log('Dropping tables');
-db.run('DROP TABLE IF EXISTS commits;');
+// db.run('DROP TABLE IF EXISTS commits;');
 db.run('DROP VIEW IF EXISTS commit_counters;');
 
 db.serialize(function() {

@@ -1,4 +1,6 @@
 <div class="badge" title="<%= tooltip %>">
   <img src="<%= image %>" alt="<%= imageAlt %>" />
-  <div class="title"><%= title %></div>
+  <% if (locals.imageOver) { %>
+    <img class="overImage" src="<%= imageOver %>" alt="<%= imageOverAlt %>" />
+  <% } %>
 </div>

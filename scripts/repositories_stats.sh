@@ -15,7 +15,7 @@ commit_stats() {
     local stats=$(git --no-pager show $commit --numstat --format='"%H","%ae","%aI"')
     local files_count=$(echo "$stats" | wc -l)
     if(( files_count > 100 )); then
-      printf "%s\n" "${mag}$commit has too many files, ignoring...${end}"
+      printf "%s\n" "${mag}$commit changed too many files, ignoring...${end}"
       continue
     fi
     local css_loc_added=0
@@ -45,81 +45,88 @@ commit_stats() {
     while read line;
     # Line is in the format: <#LOC added> <#LOC deleted> <File name>
     do
+      local loc_added=$(echo $line | awk '{print $1;}')
+      local loc_removed=$(echo $line | awk '{print $2;}')
+      if [[ $loc_added == "-" ]] || [[ $loc_removed == "-" ]];
+      then
+        # Ignore binary file
+        continue
+      fi
       # JS
       if [[ $line == *.js ]];
       then
-        let $((js_loc_added += $(echo $line | awk '{print $1;}')))
-        let $((js_loc_removed += $(echo $line | awk '{print $2;}')))
+        let $((js_loc_added += loc_added))
+        let $((js_loc_removed += loc_removed))
         continue
       fi
       # package.json
       if [[ $line == *package.json ]];
       then
-        let $((package_json_loc_added += $(echo $line | awk '{print $1;}')))
-        let $((package_json_loc_removed += $(echo $line | awk '{print $2;}')))
+        let $((package_json_loc_added += loc_added))
+        let $((package_json_loc_removed += loc_removed))
         continue
       fi
       # TS
       if [[ $line == *.ts ]];
       then
-        let $((ts_loc_added += $(echo $line | awk '{print $1;}')))
-        let $((ts_loc_removed += $(echo $line | awk '{print $2;}')))
+        let $((ts_loc_added += loc_added))
+        let $((ts_loc_removed += loc_removed))
         continue
       fi
       # CSS
       if [[ $line == *.css ]];
       then
-        let $((css_loc_added += $(echo $line | awk '{print $1;}')))
-        let $((css_loc_removed += $(echo $line | awk '{print $2;}')))
+        let $((css_loc_added += loc_added))
+        let $((css_loc_removed += loc_removed))
         continue
       fi
       # SCSS
       if [[ $line == *.scss ]];
       then
-        let $((scss_loc_added += $(echo $line | awk '{print $1;}')))
-        let $((scss_loc_removed += $(echo $line | awk '{print $2;}')))
+        let $((scss_loc_added += loc_added))
+        let $((scss_loc_removed += loc_removed))
         continue
       fi
       # SASS
       if [[ $line == *.sass ]];
       then
-        let $((sass_loc_added += $(echo $line | awk '{print $1;}')))
-        let $((sass_loc_removed += $(echo $line | awk '{print $2;}')))
+        let $((sass_loc_added += loc_added))
+        let $((sass_loc_removed += loc_removed))
         continue
       fi
       # LESS
       if [[ $line == *.less ]];
       then
-        let $((less_loc_added += $(echo $line | awk '{print $1;}')))
-        let $((less_loc_removed += $(echo $line | awk '{print $2;}')))
+        let $((less_loc_added += loc_added))
+        let $((less_loc_removed += loc_removed))
         continue
       fi
       # Ruby
       if [[ $line == *.rb ]];
       then
-        let $((ruby_loc_added += $(echo $line | awk '{print $1;}')))
-        let $((ruby_loc_removed += $(echo $line | awk '{print $2;}')))
+        let $((ruby_loc_added += loc_added))
+        let $((ruby_loc_removed += loc_removed))
         continue
       fi
       # Rake
       if [[ $line == *.rake ]];
       then
-        let $((rake_loc_added += $(echo $line | awk '{print $1;}')))
-        let $((rake_loc_removed += $(echo $line | awk '{print $2;}')))
+        let $((rake_loc_added += loc_added))
+        let $((rake_loc_removed += loc_removed))
         continue
       fi
       # Java
       if [[ $line == *.java ]];
       then
-        let $((java_loc_added += $(echo $line | awk '{print $1;}')))
-        let $((java_loc_removed += $(echo $line | awk '{print $2;}')))
+        let $((java_loc_added += loc_added))
+        let $((java_loc_removed += loc_removed))
         continue
       fi
       # Java
-      if [[ $line == *.ex ]];
+      if [[ $line == *.ex ]] || [[ $line == *.exs ]];
       then
-        let $((elxir_loc_added += $(echo $line | awk '{print $1;}')))
-        let $((elixir_loc_removed += $(echo $line | awk '{print $2;}')))
+        let $((elixir_loc_added += loc_added))
+        let $((elixir_loc_removed += loc_removed))
         continue
       fi
     done <<< "$stats"
@@ -168,6 +175,7 @@ process_repo() {
   cd $targetDir
   # Force sync to latest master.
   printf "%s\n" "${yel}Syncing to latest master commit.${end}"
+  # TODO: uncomment next lines.
   # git reset --hard origin/master
   # git pull
   # Extract commits stats.

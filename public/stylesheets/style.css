@@ -85,6 +85,11 @@ aside .name {
   height: 64px;
 }
 
+.badge .overImage {
+  position: absolute;
+  top: 0;
+}
+
 .badge .title {
   padding-top: 4px;
 }
