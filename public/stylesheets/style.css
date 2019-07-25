@@ -40,8 +40,20 @@ header .logo-name {
 }
 
 main {
+  padding: 32px 0;
   height: calc(100% - 64px);
+  max-width: 1440px;
+  margin: auto;
+}
+
+main .charts {
+  height: 360px;
   display: flex;
+  justify-content: space-evenly;
+}
+
+main .charts canvas {
+  height: 100%;
 }
 
 aside {
@@ -66,12 +78,13 @@ aside .name {
 }
 
 .badges {
-  flex: 1;
   display: flex;
+  flex-wrap: wrap;
+  padding: 64px 0;
 }
 
 .badge {
-  width: 72px;
+  min-width: 72px;
   display: flex;
   flex-direction: column;
   align-items: center;

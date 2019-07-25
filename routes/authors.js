@@ -110,20 +110,13 @@ function calcBadges(counters) {
 }
 
 /* GET users listing. */
-router.get('/:email', function(req, res, next) {
-  db.all(`
-    SELECT * FROM commit_counters
-    WHERE author_email='${req.params.email}';
-    `, [],
-    (err, rows) => {
-      counters = rows[0];
-      res.render('author', {
-        badges: calcBadges(counters),
-        counters,
-        title: req.params.email,
-      });
-    });
-  // res.send(req.params.email);
+router.get('/:email', async function(req, res, next) {
+  const counters = await db.commitCountersBy(req.params.email)
+  res.render('author', {
+    badges: calcBadges(counters),
+    counters,
+    title: req.params.email,
+  });
 });
 
 module.exports = router;

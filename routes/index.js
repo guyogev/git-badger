@@ -4,10 +4,9 @@ const router = express.Router();
 const db = require('../db');
 
 /* GET home page. */
-router.get('/', (req, res, next) => {
-  db.all('SELECT DISTINCT author_email FROM commits ORDER BY author_email',
-      [],
-      (err, authors) => res.render('index', { title: 'Express', authors }));
+router.get('/', async (req, res, next) => {
+  const authors = await db.allAuthors()
+  res.render('index', { title: 'Express', authors });
 });
 
 module.exports = router;
