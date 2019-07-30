@@ -1,19 +1,67 @@
-# of commits per user (may include dup emails) in repo => git shortlog -e -s -n
+<p align="center">
+  <a href="https://github.com/guyogev/git-badger">
+    <img alt="fontmeme" src="https://fontmeme.com/permalink/190719/adb295d9b28b5092fadf8337ee09c490.png" width="435" />
+  </a>
+</p>
 
-### Badgets
+<p align="center">
+  Git statistics that mean nothing at all.
+</p>
 
-Commit count:
-- Active at year - at least one commit.
-- Buzzy bee - at least X commits per year.
-- Strick - nax number of workdays with a commit
-- Resoraction - gap in the commits time.
-- zombie - no commit in the past X months.
+## About
 
-Lang #
-- http://www.martialartsguy.com/kung-fu-belts/
-- Readability strangth - 10X LOC
+GitBadger visualizes git repositories commits history statistics.
+Unlike other great code statistics tools such as [WakaTime](https://wakatime.com/vs-code-stats) & [codestats](https://codestats.net/), it doesn't require IDE integration. All statistics derived from the repositories git log.
 
-Special files:
-- Captain - wrote a docker file.
-- karma - wrote karma config.
-- robots.txt
+The generated report presents the author contribution and experience in the form of Graphs and achievement badges.
+
+## So what does it mean
+
+Absolutely nothing. It is just for fun. Please **do not** try to measure team performance using this tool.
+
+## Badges
+
+Badges are calculated at `authors.js`.
+Thresholds are not deeply thought through.
+
+- Busy Bee - Author was very active lately.
+- Bee hive - Author was very active for long time.
+- Builder - Number of repositories the author contributed to.
+- Experience - Number of commits by author.
+- Grow - Author was more productive lately, comparing to earlier period.
+- Language writer - Author has some experience with this language.
+- Language reader - Author has a lot of experience with this language.
+- Rake - Author make us of Rake tasks.
+- Zombie - Author is inactive for a long time.
+
+## Usage
+
+GitBadger make use of a few scripts to read repositories logs, extract the data, store it to DB, and display the it via HTML pages serviced by an Express app.
+
+### TLDR;
+Run a demo:
+
+``` bash
+cp ./examples/bitbucket_repositories.txt /tmp/git_badger/bitbucket_repositories.txt
+npm install
+node ./setup.js
+bash ./scripts/repositories_stats.sh
+bash ./scripts/load_commits_to_db.sh
+npm start
+```
+
+### In more detail
+
+#### Setup DB
+
+`setup.js` script initializes the sqlite3 DB.
+
+#### Extracting data from repositories
+
+`repositories_stats.sh` script reads data from a `REPOSITORIES_FILE` - a txt file that contains a list of git repositories SSH hrefs.
+
+Each repository git log is parsed, and converted into a CSV.
+
+#### Loading the data into DB
+
+`load_commits_to_db.sh` script reads the above CSVs, and insert them it into DB.
