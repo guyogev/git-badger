@@ -4,11 +4,20 @@
 #    has SSH access to the repositories).
 # 2. Clones each repositoty to $CLONES_FOLDER unless local copy already exist.
 # 3. Syncs each repository to master branch.
+# 4. Extrats repository git log into a CSV.
 
 source ./scripts/constants.sh
 
+#######################################
+# Reads each commit data, format the data into a CSV, and write it to file.
+# If commit touched to many files (more than 100), ignore it.
+# Arguments:
+#   repo - SSH href for the repo.
+#   outputFile - File to write result to.
+#######################################
 commit_stats() {
   local repo=$1
+  local outputFile=$2
   for commit in $(git --no-pager log --format='%H')
   do
     # printf "%s\n" "${yel}Processing commit $commit...${end}"
@@ -130,7 +139,7 @@ commit_stats() {
         continue
       fi
     done <<< "$stats"
-    # Order must match INSERT commant.
+    # Notice, order must match INSERT command at load_commits_to_db.sh script.
     line_to_write+=",$css_loc_added"
     line_to_write+=",$css_loc_removed"
     line_to_write+=",$elixir_loc_added"
@@ -153,7 +162,7 @@ commit_stats() {
     line_to_write+=",$scss_loc_removed"
     line_to_write+=",$ts_loc_added"
     line_to_write+=",$ts_loc_removed"
-    echo "$line_to_write" >> $2
+    echo "$line_to_write" >> $outputFile
   done
 }
 
@@ -164,8 +173,8 @@ commit_stats() {
 #   repo - SSH href for the repo.
 #######################################
 process_repo() {
-  repo=$1
-  targetDir=$(cloned_repo_path $repo)
+  local repo=$1
+  local targetDir=$(cloned_repo_path $repo)
   mkdir -p $targetDir
   # Clone repo if it doesn't exist.
   if [ -z "$(ls -A $targetDir)" ]; then
@@ -175,12 +184,11 @@ process_repo() {
   cd $targetDir
   # Force sync to latest master.
   printf "%s\n" "${yel}Syncing to latest master commit.${end}"
-  # TODO: uncomment next lines.
-  # git reset --hard origin/master
-  # git pull
+  git reset --hard origin/master
+  git pull
   # Extract commits stats.
-  commitStatsFolder=$(git_stats_path $repo);
-  commitStatsFile=$(git_stats_commits_csv_path $repo)
+  local commitStatsFolder=$(git_stats_path $repo);
+  local commitStatsFile=$(git_stats_commits_csv_path $repo)
   mkdir -p $commitStatsFolder
   printf "%s\n" "${yel}Extracting commits data from git log into $commitStatsFile.${end}"
   # Format log to CSV.

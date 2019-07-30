@@ -12,7 +12,7 @@ const db = new sqlite3.Database(
   });
 
 console.log('Dropping tables');
-// db.run('DROP TABLE IF EXISTS commits;');
+db.run('DROP TABLE IF EXISTS commits;');
 db.run('DROP VIEW IF EXISTS commit_counters;');
 
 db.serialize(function() {
@@ -20,7 +20,7 @@ db.serialize(function() {
   db.run(`
     CREATE TABLE IF NOT EXISTS commits (
       ID                        INTEGER PRIMARY KEY AUTOINCREMENT,
-      commit_hash               TEXT,
+      commit_hash               TEXT UNIQUE,
       repo_href                 TEXT,
       author_email              TEXT,
       datetime                  DATETIME,

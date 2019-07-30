@@ -3,7 +3,6 @@
 # CSV is processed $BULK_SIZE lines at a time.
 #
 # Expect CSV to match commits table schema.
-# commit_hash,repo_href,author_email,datetime
 
 source ./scripts/constants.sh
 
@@ -16,21 +15,11 @@ do
   printf "%s\n" "${grn}Start processing ${repo}.${end}"
   commitStatsFolder=$(git_stats_path $repo);
   commitStatsFile=$(git_stats_commits_csv_path $repo)
-  echo $commitStatsFolder
-  cd $commitStatsFolder
-  printf "%s\n" "${yel}Cleaning up old files...${end}"
-  split -d -l $BULK_SIZE commits.csv commits_part
-  file_splits=$(ls | grep commits_part)
-  cd -
-  for f in $file_splits
-  do
-    printf "%s\n" "${yel}Inserting ${f} to DB.${end}"
-    BULK_INSERT=$(sed "s/.*/$PREFIX&$SUFFIX/" $commitStatsFile)
-    echo "BEGIN TRANSACTION;" > /tmp/sql
-    echo  "$BULK_INSERT" >> /tmp/sql
-    echo "COMMIT;" >> /tmp/sql
-    sqlite3 ./db/git_badger.sqlite ".read /tmp/sql"
-  done
-  rm $file_splits
+  printf "%s\n" "${yel}Inserting $commitStatsFile to DB.${end}"
+  BULK_INSERT=$(sed "s/.*/$PREFIX&$SUFFIX/" $commitStatsFile)
+  echo "BEGIN TRANSACTION;" > /tmp/sql
+  echo  "$BULK_INSERT" >> /tmp/sql
+  echo "COMMIT;" >> /tmp/sql
+  sqlite3 ./db/git_badger.sqlite ".read /tmp/sql"
   printf "%s\n" "${grn}Done processing ${repo}.${end}"
 done
