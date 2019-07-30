@@ -1,18 +1,23 @@
 var sqlite3 = require('sqlite3').verbose()
 
-const DBSOURCE = "./db/git_badger.sqlite"
+const DB_SOURCE = "./db/git_badger.sqlite"
 
-let db = new sqlite3.Database(DBSOURCE, (err) => {
+let db = new sqlite3.Database(DB_SOURCE, (err) => {
     if (err) {
       // Cannot open database
-      console.error('aaaaaaa', err.message)
+      console.error(`Failed to open ${DB_SOURCE}`, err.message)
       throw err
     };
 });
 
 function allAuthors() {
   return new Promise((resolve, reject) => {
-    db.all('SELECT DISTINCT author_email FROM commits ORDER BY author_email',
+    db.all(`
+      SELECT author_email, COUNT(*) AS total_commits
+      FROM commits
+      WHERE author_email LIKE '%@%'
+      GROUP BY author_email
+      ORDER BY total_commits DESC`,
       [],
       (err, rows) => resolve(rows));
   });

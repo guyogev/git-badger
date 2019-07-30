@@ -1,7 +1,6 @@
 async function renderOverTimeGraph(email) {
   const response = await fetch(`/api/${email}`);
   const json = await response.json();
-  console.log(json);
   const lineLabels = json.monthlyCommits.map(d => d.yyyymm);
   const lineData = json.monthlyCommits.map(d => d.total_commits);
   const commitsChart = document.getElementById('commitsChart');
@@ -14,7 +13,7 @@ async function renderOverTimeGraph(email) {
         label: 'Commits over time',
         data: lineData,
         borderColor: '#36A2EB',
-        backgroundColor: '#abcfe8',
+        backgroundColor: '#ABCFE8',
       }],
     },
     options: {

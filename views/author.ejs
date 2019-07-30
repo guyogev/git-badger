@@ -1,18 +1,8 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <title>
-    <%= title %>
-  </title>
-  <link rel='stylesheet' href='/stylesheets/style.css' />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-  <script src="/javascripts/charts.js"></script>
-</head>
-
+<%- include('./partials/head') %>
 <body>
   <%- include('./partials/header') %>
-
   <main>
     <div class="charts">
       <canvas id="commitsChart"></canvas>

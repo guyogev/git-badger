@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
+  <%- include('./partials/head') %>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-    <ul>
-      <% authors.forEach(function(author){ %>
-        <li>
-          <a href=<%= `/authors/${author.author_email}` %>>
-            <%= author.author_email %>>
-          </a>
-        </li>
-      <% }); %>
-    </ul>
+    <%- include('./partials/header') %>
+    <main class="index-page">
+      <table>
+        <tr>
+          <th></th>
+          <th>Author</th>
+          <th># Of commits</th>
+        </tr>
+        <% authors.forEach(function(author, i){ %>
+          <tr>
+            <td><%= i + 1 %></td>
+            <td>
+              <a href=<%= `/authors/${author.author_email}` %>>
+                <%= author.author_email %>
+              </a>
+            </td>
+            <td><%= author.total_commits %></td>
+          </tr>
+        <% }); %>
+      </table>
+    </main>
   </body>
 </html>

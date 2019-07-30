@@ -6,7 +6,7 @@ const db = require('../db');
 /* GET home page. */
 router.get('/', async (req, res, next) => {
   const authors = await db.allAuthors()
-  res.render('index', { title: 'Express', authors });
+  res.render('index', {authors});
 });
 
 module.exports = router;
