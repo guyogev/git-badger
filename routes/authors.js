@@ -128,6 +128,12 @@ function calcBadges_(counters) {
   if (counters.java_loc_added > 100000) {
     res.push({ name: 'java-reviewer' });
   };
+
+  // MD badges
+  if (counters.md_loc_added > 100) {
+    res.push({ name: 'md-writer' });
+  };
+
   return res.sort((a, b) => a.name > b.name ? 1 : -1);
 }
 

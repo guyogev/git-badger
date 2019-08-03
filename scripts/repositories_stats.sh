@@ -37,6 +37,8 @@ commit_stats() {
     local js_loc_removed=0
     local less_loc_added=0
     local less_loc_removed=0
+    local md_loc_added=0
+    local md_loc_removed=0
     local package_json_loc_added=0
     local package_json_loc_removed=0
     local rake_loc_added=0
@@ -131,11 +133,18 @@ commit_stats() {
         let $((java_loc_removed += loc_removed))
         continue
       fi
-      # Java
+      # Elixir
       if [[ $line == *.ex ]] || [[ $line == *.exs ]];
       then
         let $((elixir_loc_added += loc_added))
         let $((elixir_loc_removed += loc_removed))
+        continue
+      fi
+      # Markdown
+      if [[ $line == *.md ]];
+      then
+        let $((md_loc_added += loc_added))
+        let $((md_loc_removed += loc_removed))
         continue
       fi
     done <<< "$stats"
@@ -150,6 +159,8 @@ commit_stats() {
     line_to_write+=",$js_loc_removed"
     line_to_write+=",$less_loc_added"
     line_to_write+=",$less_loc_removed"
+    line_to_write+=",$md_loc_added"
+    line_to_write+=",$md_loc_removed"
     line_to_write+=",$package_json_loc_added"
     line_to_write+=",$package_json_loc_removed"
     line_to_write+=",$rake_loc_added"

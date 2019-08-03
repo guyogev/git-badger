@@ -6,7 +6,33 @@
 
 source ./scripts/constants.sh
 
-readonly PREFIX="INSERT OR IGNORE INTO commits(repo_href,commit_hash,author_email,datetime,css_loc_added,css_loc_removed,elixir_loc_added,elixir_loc_removed,java_loc_added,java_loc_removed,js_loc_added,js_loc_removed,less_loc_added,less_loc_removed,package_json_loc_added,package_json_loc_removed,rake_loc_added,rake_loc_removed,ruby_loc_added,ruby_loc_removed,sass_loc_added,sass_loc_removed,scss_loc_added,scss_loc_removed,ts_loc_added,ts_loc_removed) VALUES("
+PREFIX="INSERT OR IGNORE INTO commits(repo_href,commit_hash,author_email,datetime"
+PREFIX+=",css_loc_added"
+PREFIX+=",css_loc_removed"
+PREFIX+=",elixir_loc_added"
+PREFIX+=",elixir_loc_removed"
+PREFIX+=",java_loc_added"
+PREFIX+=",java_loc_removed"
+PREFIX+=",js_loc_added"
+PREFIX+=",js_loc_removed"
+PREFIX+=",less_loc_added"
+PREFIX+=",less_loc_removed"
+PREFIX+=",md_loc_added"
+PREFIX+=",md_loc_removed"
+PREFIX+=",package_json_loc_added"
+PREFIX+=",package_json_loc_removed"
+PREFIX+=",rake_loc_added"
+PREFIX+=",rake_loc_removed"
+PREFIX+=",ruby_loc_added"
+PREFIX+=",ruby_loc_removed"
+PREFIX+=",sass_loc_added"
+PREFIX+=",sass_loc_removed"
+PREFIX+=",scss_loc_added"
+PREFIX+=",scss_loc_removed"
+PREFIX+=",ts_loc_added"
+PREFIX+=",ts_loc_removed"
+PREFIX+=") VALUES("
+readonly PREFIX;
 readonly SUFFIX=");"
 readonly BULK_SIZE=1000;
 
