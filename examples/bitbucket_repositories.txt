@@ -1,0 +1,10 @@
+git@github.com:Spectory/coyote.git
+git@github.com:Spectory/lithtml-todomvc.git
+git@github.com:Spectory/csv_streaming.git
+git@github.com:Spectory/Connify.git
+git@github.com:Spectory/SoundsGreat.git
+git@github.com:Spectory/head-hunter.git
+git@github.com:Spectory/Head-hunter-UI.git
+git@github.com:Spectory/retro.git
+git@github.com:Spectory/ruby_logger.git
+git@github.com:Spectory/Game-Of-Life.git
